@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
 import 'package:myportofolio_mobile/screens/project_form.dart';
 import 'package:myportofolio_mobile/screens/education_form.dart';
+import 'package:myportofolio_mobile/screens/project_list_screen.dart';
+import 'package:myportofolio_mobile/screens/login_screen.dart';
+import 'package:myportofolio_mobile/services/auth_guard.dart';
+import 'package:provider/provider.dart';
+import 'package:myportofolio_mobile/services/auth_state.dart';
 
 // Widget kartu tombol aksi
 class ItemCard extends StatelessWidget {
@@ -16,26 +21,52 @@ class ItemCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: () {
+        onTap: () async {
+          if (item.name == "Logout") {
+            await context.read<AuthState>().logout();
+
+            if (!context.mounted) return;
+
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(const SnackBar(content: Text('Berhasil logout.')));
+
+            return;
+          }
+
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
-                content: Text(
-                  "Kamu telah menekan tombol ${item.name}!",
-                ),
+                content: Text("Kamu telah menekan tombol ${item.name}!"),
               ),
             );
 
           // Navigasi ke halaman yang sesuai
-          if (item.name == "Tambah Proyek") {
+          if (item.name == "Lihat Proyek") {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const ProjectFormPage(),
+                builder: (context) => const ProjectListScreen(),
               ),
             );
+          } else if (item.name == "Login") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+            );
+          } else if (item.name == "Tambah Proyek") {
+            final allowed = await ensureLoggedIn(context);
+            if (!context.mounted || !allowed) return;
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProjectFormPage()),
+            );
           } else if (item.name == "Add Education") {
+            final allowed = await ensureLoggedIn(context);
+            if (!context.mounted || !allowed) return;
+
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -50,11 +81,7 @@ class ItemCard extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  item.icon,
-                  color: Colors.white,
-                  size: 30.0,
-                ),
+                Icon(item.icon, color: Colors.white, size: 30.0),
                 const SizedBox(height: 6.0),
                 Text(
                   item.name,

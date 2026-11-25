@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 
@@ -13,16 +12,11 @@ class _EducationFormPageState extends State<EducationFormPage> {
   final _formKey = GlobalKey<FormState>();
 
   // Controller untuk setiap input
-  final TextEditingController _institutionController =
-      TextEditingController();
-  final TextEditingController _degreeController =
-      TextEditingController();
-  final TextEditingController _majorController =
-      TextEditingController();
-  final TextEditingController _startDateController =
-      TextEditingController();
-  final TextEditingController _endDateController =
-      TextEditingController();
+  final TextEditingController _institutionController = TextEditingController();
+  final TextEditingController _degreeController = TextEditingController();
+  final TextEditingController _majorController = TextEditingController();
+  final TextEditingController _startDateController = TextEditingController();
+  final TextEditingController _endDateController = TextEditingController();
 
   DateTime? _startDate;
   DateTime? _endDate;
@@ -37,9 +31,7 @@ class _EducationFormPageState extends State<EducationFormPage> {
   }
 
   // Menampilkan date picker
-  Future<void> _selectDate({
-    required bool isStartDate,
-  }) async {
+  Future<void> _selectDate({required bool isStartDate}) async {
     FocusScope.of(context).unfocus();
 
     final DateTime? selectedDate = await showDatePicker(
@@ -49,9 +41,7 @@ class _EducationFormPageState extends State<EducationFormPage> {
           : (_endDate ?? _startDate ?? DateTime.now()),
       firstDate: DateTime(1900),
       lastDate: DateTime(2100),
-      helpText: isStartDate
-          ? 'Select Start Date'
-          : 'Select End Date',
+      helpText: isStartDate ? 'Select Start Date' : 'Select End Date',
     );
 
     if (selectedDate != null) {
@@ -61,8 +51,7 @@ class _EducationFormPageState extends State<EducationFormPage> {
           _startDateController.text = _formatDate(selectedDate);
 
           // Hapus tanggal selesai jika lebih awal dari tanggal mulai
-          if (_endDate != null &&
-              _endDate!.isBefore(_startDate!)) {
+          if (_endDate != null && _endDate!.isBefore(_startDate!)) {
             _endDate = null;
             _endDateController.clear();
           }
@@ -87,25 +76,15 @@ class _EducationFormPageState extends State<EducationFormPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'Institution: ${_institutionController.text.trim()}',
-                  ),
+                  Text('Institution: ${_institutionController.text.trim()}'),
                   const SizedBox(height: 8),
-                  Text(
-                    'Degree: ${_degreeController.text.trim()}',
-                  ),
+                  Text('Degree: ${_degreeController.text.trim()}'),
                   const SizedBox(height: 8),
-                  Text(
-                    'Major: ${_majorController.text.trim()}',
-                  ),
+                  Text('Major: ${_majorController.text.trim()}'),
                   const SizedBox(height: 8),
-                  Text(
-                    'Start Date: ${_startDateController.text}',
-                  ),
+                  Text('Start Date: ${_startDateController.text}'),
                   const SizedBox(height: 8),
-                  Text(
-                    'End Date: ${_endDateController.text}',
-                  ),
+                  Text('End Date: ${_endDateController.text}'),
                 ],
               ),
             ),
@@ -137,9 +116,7 @@ class _EducationFormPageState extends State<EducationFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(
-          child: Text('Add Education Form'),
-        ),
+        title: const Center(child: Text('Add Education Form')),
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
@@ -264,8 +241,7 @@ class _EducationFormPageState extends State<EducationFormPage> {
                       return 'End date must be selected!';
                     }
 
-                    if (_startDate != null &&
-                        _endDate!.isBefore(_startDate!)) {
+                    if (_startDate != null && _endDate!.isBefore(_startDate!)) {
                       return 'End date cannot be before start date!';
                     }
 
@@ -281,10 +257,8 @@ class _EducationFormPageState extends State<EducationFormPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor:
-                          WidgetStateProperty.all(Colors.indigo),
-                      foregroundColor:
-                          WidgetStateProperty.all(Colors.white),
+                      backgroundColor: WidgetStateProperty.all(Colors.indigo),
+                      foregroundColor: WidgetStateProperty.all(Colors.white),
                     ),
                     onPressed: _saveEducation,
                     child: const Text('Save'),

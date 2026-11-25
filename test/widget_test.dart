@@ -19,7 +19,9 @@ void main() {
     expect(find.text('Logout'), findsOneWidget);
   });
 
-  testWidgets('SnackBar appears when menu is pressed', (WidgetTester tester) async {
+  testWidgets('SnackBar appears when menu is pressed', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(const MyApp());
 
     await tester.tap(find.text('Lihat Proyek'));
